@@ -1,4 +1,4 @@
-id,name,memo
-1,hoge,test comment
-2,fuga,nyaa
-3,json,i am json
+id,name,age,gender,postalcode,tel,location,job,salary,memo
+1,Yamada Taro,10,male,100-0000,080-XXXX-XXXX,Tokyo,Software Engineer,$100000,from Japan
+2,John Smith,10,male,200-0000,090-XXXX-XXXX,San Francisco,Software Engineer,$100000,from America
+3,Chang Lee,10,male,300-0000,080-XXXX-XXXX,Beijing,Software Engineer,$100000,from China

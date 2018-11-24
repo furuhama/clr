@@ -33,6 +33,9 @@ fn main() -> Result<(), Box<Error>> {
     let buf_reader = BufReader::new(file);
     let mut rdr = csv::Reader::from_reader(buf_reader);
 
+    let header = rdr.headers()?;
+    colorize_row(&header);
+
     for record in rdr.records() {
         let record = record?;
         colorize_row(&record);

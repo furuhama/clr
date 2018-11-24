@@ -13,3 +13,7 @@ Cargo build & Set PATH to a generated executable file
 ```
 $ clr [target csv file]
 ```
+
+### Screenshot
+
+![sample01](https://github.com/furuhama/clr/blob/master/img/sample01.png)

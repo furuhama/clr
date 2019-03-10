@@ -1,8 +1,13 @@
 [package]
-name = "clr"
+name    = "clr"
 version = "0.2.0"
 authors = ["furuhama <yuuuuusuke0210@gmail.com>"]
 edition = "2018"
+exclude = [
+    "sample.csv",
+    "sample_shift_jis.csv",
+    "img/*",
+]
 
 [dependencies]
 csv = "1"

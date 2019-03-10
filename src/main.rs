@@ -36,11 +36,19 @@ fn main() -> Result<(), Box<Error>> {
     // It should be refactored to processing data as a stream.)
     let mut buf = Vec::new();
 
-    let filename = env::args().nth(1).unwrap();
-    let file = File::open(filename)?;
-    let mut buf_reader = BufReader::new(file);
+    // If an argument is given,
+    // it will be taken as a filename of target CSV file.
+    // Or, it will be taken as an input data ig given from STDIN.
+    if let Some(filename) = env::args().nth(1) {
+        let file = File::open(filename)?;
+        let mut buf_reader = BufReader::new(file);
 
-    buf_reader.read_to_end(&mut buf)?;
+        buf_reader.read_to_end(&mut buf)?;
+    } else {
+        let mut input = io::stdin();
+
+        input.read_to_end(&mut buf)?;
+    };
 
     // Even if input `buf` variable data encoding is `UTF-8` already,
     // it does not raise an error on the decoding process written below.

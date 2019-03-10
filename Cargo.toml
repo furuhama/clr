@@ -1,9 +1,11 @@
 [package]
-name    = "clr"
-version = "0.2.0"
-authors = ["furuhama <yuuuuusuke0210@gmail.com>"]
-edition = "2018"
-exclude = [
+name        = "clr"
+version     = "0.2.0"
+authors     = ["furuhama <yuuuuusuke0210@gmail.com>"]
+edition     = "2018"
+description = "Colorize CSV data"
+license     = "MIT"
+exclude     = [
     "sample.csv",
     "sample_shift_jis.csv",
     "img/*",

@@ -1,10 +1,12 @@
 extern crate csv;
+extern crate encoding_rs;
 
 use std::fs::File;
-use std::io::BufReader;
+use std::io::{self, BufReader, Read};
 use std::env;
 use std::error::Error;
 use csv::StringRecord;
+use encoding_rs::SHIFT_JIS;
 
 const ANSI_COLOR_CODES: [&str; 7] = [
     "\x1b[31m", // Red
@@ -28,10 +30,23 @@ fn colorize_row(row: &StringRecord) {
 }
 
 fn main() -> Result<(), Box<Error>> {
+    // Read input data, and put them all on buffer at once.
+    // (If an input data size gets bigger,
+    // this code may cause performance problem.
+    // It should be refactored to processing data as a stream.)
+    let mut buf = Vec::new();
+
     let filename = env::args().nth(1).unwrap();
     let file = File::open(filename)?;
-    let buf_reader = BufReader::new(file);
-    let mut rdr = csv::Reader::from_reader(buf_reader);
+    let mut buf_reader = BufReader::new(file);
+
+    buf_reader.read_to_end(&mut buf)?;
+
+    // Even if input `buf` variable data encoding is `UTF-8` already,
+    // it does not raise an error on the decoding process written below.
+    let (buf_as_utf8, _, _) = SHIFT_JIS.decode(&buf);
+
+    let mut rdr = csv::Reader::from_reader(buf_as_utf8.as_bytes());
 
     let header = rdr.headers()?;
     colorize_row(&header);

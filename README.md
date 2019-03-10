@@ -30,6 +30,11 @@ Or, pass a column-separated data directly as a STDIN.
 $ cat [target CSV file] | clr
 ```
 
+### Support
+
+- UTF-8
+- SHIFT-JIS
+
 ### Screenshot
 
 ![sample01](https://github.com/furuhama/clr/blob/master/img/sample01.png)

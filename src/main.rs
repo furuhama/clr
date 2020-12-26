@@ -29,7 +29,7 @@ fn colorize_row(row: &StringRecord) {
     println!("{}", RESET_CODE);
 }
 
-fn main() -> Result<(), Box<Error>> {
+fn main() -> Result<(), Box<dyn Error>> {
     // Read input data, and put them all on buffer at once.
     // (If an input data size gets bigger,
     // this code may cause performance problem.

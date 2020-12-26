@@ -23,7 +23,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "clr"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "csv 1.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "encoding_rs 0.8.26 (registry+https://github.com/rust-lang/crates.io-index)",

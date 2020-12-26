@@ -1,12 +1,12 @@
 extern crate csv;
 extern crate encoding_rs;
 
-use std::fs::File;
-use std::io::{self, BufReader, Read};
-use std::env;
-use std::error::Error;
 use csv::StringRecord;
 use encoding_rs::SHIFT_JIS;
+use std::env;
+use std::error::Error;
+use std::fs::File;
+use std::io::{self, BufReader, Read};
 
 const ANSI_COLOR_CODES: [&str; 7] = [
     "\x1b[31m", // Red
@@ -22,7 +22,7 @@ const RESET_CODE: &str = "\x1b[0m";
 
 fn colorize_row(row: &StringRecord) {
     for (idx, elem) in row.iter().enumerate() {
-        let color_code = ANSI_COLOR_CODES[idx%ANSI_COLOR_CODES.len()];
+        let color_code = ANSI_COLOR_CODES[idx % ANSI_COLOR_CODES.len()];
         print!("{}{} ", color_code, elem);
     }
 

@@ -37,4 +37,4 @@ $ cat [target CSV file] | clr
 
 ### Screenshot
 
-![sample01](https://github.com/furuhama/clr/blob/master/img/sample01.png)
+![sample01](https://github.com/furuhama/clr/blob/main/img/sample01.png)

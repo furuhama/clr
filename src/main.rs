@@ -21,48 +21,60 @@ const ANSI_COLOR_CODES: [&str; 7] = [
 const RESET_CODE: &str = "\x1b[0m";
 const LINE_NUM_COLOR: &str = "\x1b[2m"; // Dim
 
-fn colorize_row(row: &StringRecord, line_num: Option<usize>, width: usize) {
-    if let Some(n) = line_num {
-        print!("{}{:>width$} | {}", LINE_NUM_COLOR, n, RESET_CODE, width = width);
+fn print_row(row: &StringRecord, line_num: Option<usize>, width: usize, color: bool) {
+    if width > 0 {
+        if color {
+            if let Some(n) = line_num {
+                print!("{}{:>width$} | {}", LINE_NUM_COLOR, n, RESET_CODE, width = width);
+            } else {
+                print!("{}{:>width$} | {}", LINE_NUM_COLOR, "#", RESET_CODE, width = width);
+            }
+        } else {
+            let label = line_num.map(|n| n.to_string()).unwrap_or_else(|| "#".to_string());
+            print!("{:>width$} | ", label, width = width);
+        }
+    }
+
+    for (idx, elem) in row.iter().enumerate() {
+        if color {
+            let color_code = ANSI_COLOR_CODES[idx % ANSI_COLOR_CODES.len()];
+            print!("{}{} ", color_code, elem);
+        } else {
+            if idx > 0 {
+                print!(" ");
+            }
+            print!("{}", elem);
+        }
+    }
+
+    if color {
+        println!("{}", RESET_CODE);
     } else {
-        print!("{}{:>width$} | {}", LINE_NUM_COLOR, "#", RESET_CODE, width = width);
+        println!();
     }
-
-    for (idx, elem) in row.iter().enumerate() {
-        let color_code = ANSI_COLOR_CODES[idx % ANSI_COLOR_CODES.len()];
-        print!("{}{} ", color_code, elem);
-    }
-
-    println!("{}", RESET_CODE);
-}
-
-fn colorize_row_plain(row: &StringRecord) {
-    for (idx, elem) in row.iter().enumerate() {
-        let color_code = ANSI_COLOR_CODES[idx % ANSI_COLOR_CODES.len()];
-        print!("{}{} ", color_code, elem);
-    }
-
-    println!("{}", RESET_CODE);
 }
 
 struct Args {
     filename: Option<String>,
     show_line_numbers: bool,
+    no_color: bool,
 }
 
 fn parse_args() -> Args {
     let mut filename = None;
     let mut show_line_numbers = false;
+    let mut no_color = false;
 
     for arg in env::args().skip(1) {
         match arg.as_str() {
             "-n" | "--line-number" => show_line_numbers = true,
+            "-C" | "--no-color" => no_color = true,
             s if s.starts_with('-') => {}
             _ => filename = Some(arg),
         }
     }
 
-    Args { filename, show_line_numbers }
+    Args { filename, show_line_numbers, no_color }
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -82,23 +94,25 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut rdr = csv::Reader::from_reader(buf_as_utf8.as_bytes());
 
+    let color = !args.no_color;
+
     if args.show_line_numbers {
         let records: Vec<StringRecord> = rdr.records().collect::<Result<_, _>>()?;
         let width = records.len().to_string().len().max(1);
 
         let header = rdr.headers()?;
-        colorize_row(&header, None, width);
+        print_row(&header, None, width, color);
 
         for (i, record) in records.iter().enumerate() {
-            colorize_row(record, Some(i + 1), width);
+            print_row(record, Some(i + 1), width, color);
         }
     } else {
         let header = rdr.headers()?;
-        colorize_row_plain(&header);
+        print_row(&header, None, 0, color);
 
         for record in rdr.records() {
             let record = record?;
-            colorize_row_plain(&record);
+            print_row(&record, None, 0, color);
         }
     }
 
